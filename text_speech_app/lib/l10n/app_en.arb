@@ -1,0 +1,14 @@
+{
+  "appTitle": "Text Speech App",
+  "speechToText": "Speech to Text",
+  "textToSpeech": "Text to Speech",
+  "history": "History",
+  "startRecording": "Start Recording",
+  "stopRecording": "Stop Recording",
+  "enterText": "Enter your text",
+  "selectVoice": "Select Voice",
+  "convertToSpeech": "Convert to Speech",
+  "sttHistory": "STT History",
+  "ttsHistory": "TTS History",
+  "selectFile": "Select File"
+}

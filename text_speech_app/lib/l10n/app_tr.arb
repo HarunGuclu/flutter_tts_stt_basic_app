@@ -1,0 +1,14 @@
+{
+  "appTitle": "Ses-Metin Uygulaması",
+  "speechToText": "Sesi Metne Çevir",
+  "textToSpeech": "Metni Sese Çevir",
+  "history": "Geçmiş",
+  "startRecording": "Kaydı Başlat",
+  "stopRecording": "Kaydı Durdur",
+  "enterText": "Metni girin",
+  "selectVoice": "Ses Seç",
+  "convertToSpeech": "Sese Dönüştür",
+  "sttHistory": "STT Geçmişi",
+  "ttsHistory": "TTS Geçmişi",
+  "selectFile": "Dosya Seç"
+}
