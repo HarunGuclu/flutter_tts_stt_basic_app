@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:text_speech_app/db/database_service.dart';
 import 'package:text_speech_app/l10n/app_localizations.dart';
-
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -36,6 +34,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/'); // doğrudan Home ekranına gider
+          },
+        ),
         title: const Text('Settings'),
       ),
       body: Padding(
@@ -64,13 +68,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onPressed: () async {
                   final selectedVoice = await context.push('/voice-selection');
                   if (selectedVoice != null) {
-                    await _dbService.setSetting('default_voice', selectedVoice as String);
+                    await _dbService.setSetting(
+                        'default_voice', selectedVoice as String);
                     setState(() {
                       _defaultVoice = selectedVoice;
                     });
                   }
                 },
-                child: Text(_defaultVoice ?? AppLocalizations.of(context)!.selectVoice),
+                child: Text(
+                    _defaultVoice ?? AppLocalizations.of(context)!.selectVoice),
               ),
             ),
           ],

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:text_speech_app/api/api_service.dart';
 import 'package:text_speech_app/db/database_service.dart';
 import 'package:text_speech_app/l10n/app_localizations.dart';
-
+import 'package:go_router/go_router.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -22,6 +22,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+            context.go('/'); // doğrudan Home ekranına gider
+          },
+          ),
           title: Text(AppLocalizations.of(context)!.history),
           actions: [
             IconButton(

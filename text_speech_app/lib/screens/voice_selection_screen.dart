@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:text_speech_app/api/api_service.dart';
 import 'package:text_speech_app/l10n/app_localizations.dart';
-
+import 'package:go_router/go_router.dart';
 class VoiceSelectionScreen extends StatefulWidget {
   const VoiceSelectionScreen({super.key});
 
@@ -25,6 +25,12 @@ class _VoiceSelectionScreenState extends State<VoiceSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/'); // doğrudan Home ekranına gider
+          },
+        ),
         title: Text(AppLocalizations.of(context)!.selectVoice),
       ),
       body: FutureBuilder<List<dynamic>>(

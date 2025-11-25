@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:text_speech_app/api/api_service.dart';
 import 'package:text_speech_app/services/audio_service.dart';
 import 'package:text_speech_app/db/database_service.dart';
-import 'dart:io';
 import 'package:text_speech_app/l10n/app_localizations.dart';
 
 
@@ -42,6 +41,12 @@ class _TtsScreenState extends State<TtsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/'); // doğrudan Home ekranına gider
+          },
+        ),
         title: Text(AppLocalizations.of(context)!.textToSpeech),
       ),
       body: Padding(

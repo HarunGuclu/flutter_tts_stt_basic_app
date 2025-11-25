@@ -1,12 +1,12 @@
-
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:io';
+
+typedef SoundLevelCallback = void Function(double db);
 
 class AudioService {
   FlutterSoundRecorder? _recorder;
@@ -18,16 +18,37 @@ class AudioService {
     _player = AudioPlayer();
   }
 
-  Future<void> startRecording() async {
+  /// Başlatırken ses seviyesi için callback ekledik
+  Future<void> startRecording({SoundLevelCallback? onProgress}) async {
     final status = await Permission.microphone.request();
     if (status != PermissionStatus.granted) {
       throw RecordingPermissionException('Microphone permission not granted');
     }
+
     await _recorder!.openRecorder();
+
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/recording.wav';
-    await _recorder!.startRecorder(toFile: filePath, codec: Codec.pcm16WAV);
+
+    await _recorder!.startRecorder(
+      toFile: filePath,
+      codec: Codec.pcm16WAV,
+      
+      numChannels: 1, // mono
+      sampleRate: 16000, // 16 kHz
+      audioSource: AudioSource.microphone,
+    );
+
     _isRecording = true;
+
+    // Ses seviyesi takibi
+    if (onProgress != null) {
+      _recorder!.onProgress!.listen((event) {
+        // event.decibels null olabilir, 0 ile 1 arasında normalize edelim
+        final db = event.decibels ?? 0.0;
+        onProgress(db);
+      });
+    }
   }
 
   Future<String?> stopRecording() async {
@@ -51,7 +72,8 @@ class AudioService {
     final completer = Completer<String>();
     List<int> audioBytes = [];
     final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/tts_audio_${DateTime.now().millisecondsSinceEpoch}.mp3';
+    final filePath =
+        '${directory.path}/tts_audio_${DateTime.now().millisecondsSinceEpoch}.mp3';
 
     stream.listen(
       (data) {
@@ -77,19 +99,16 @@ class AudioService {
 
     return completer.future;
   }
-  
-
-
 
   Future<void> playAudioFile(File file) async {
-  await _player!.stop();
-  await _player!.play(DeviceFileSource(file.path));
-}
+    await _player!.stop();
+    await _player!.play(DeviceFileSource(file.path));
+  }
 
   void dispose() {
-    _recorder!.closeRecorder();
+    _recorder?.closeRecorder();
     _recorder = null;
-    _player!.dispose();
+    _player?.dispose();
     _player = null;
   }
 }
